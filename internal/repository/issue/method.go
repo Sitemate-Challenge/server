@@ -13,9 +13,15 @@ func (r *Repository) Create(issue *entity.Issue) (*entity.Issue, error) {
 	return issue, nil
 }
 
-func (r *Repository) GetAll() ([]entity.Issue, error) {
+func (r *Repository) GetAll(search string) ([]entity.Issue, error) {
 	var issues []entity.Issue
-	err := r.db.Find(&issues).Error
+	query := r.db.Model(&entity.Issue{})
+
+	if search != "" {
+		query = query.Where("title ILIKE ?", "%"+search+"%")
+	}
+
+	err := query.Find(&issues).Error
 	return issues, err
 }
 

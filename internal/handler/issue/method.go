@@ -24,7 +24,7 @@ func (h *Handler) CreateIssue(c *gin.Context) {
 		return
 	}
 
-	utils.SendResponse(c, http.StatusCreated, "Issue Created", newIssue)
+	utils.SendResponse(c, http.StatusCreated, "Issue Created", newIssue.ToDTO())
 }
 
 // GetIssueByID handles retrieving an Issue by ID
@@ -41,7 +41,7 @@ func (h *Handler) GetIssueByID(c *gin.Context) {
 		return
 	}
 
-	utils.SendResponse(c, http.StatusOK, "Issue Found", issue)
+	utils.SendResponse(c, http.StatusOK, "Issue Found", issue.ToDTO())
 }
 
 // UpdateIssue handles updating an Issue
@@ -71,7 +71,7 @@ func (h *Handler) UpdateIssue(c *gin.Context) {
 		return
 	}
 
-	utils.SendResponse(c, http.StatusOK, "Issue Updated", issue)
+	utils.SendResponse(c, http.StatusOK, "Issue Updated", issue.ToDTO())
 }
 
 // DeleteIssue handles deleting an Issue
@@ -98,11 +98,18 @@ func (h *Handler) DeleteIssue(c *gin.Context) {
 
 // GetAllIssues handles retrieving all Issues
 func (h *Handler) GetAllIssues(c *gin.Context) {
-	issues, err := h.repo.GetAll()
+	searchQ := c.Query("search")
+
+	issues, err := h.repo.GetAll(searchQ)
 	if err != nil {
 		utils.SendResponse(c, http.StatusInternalServerError, "Something went wrong", err)
 		return
 	}
 
-	utils.SendResponse(c, http.StatusOK, "Issue Data", issues)
+	dtos := []entity.IssueDTO{}
+	for _, dao := range issues {
+		dtos = append(dtos, dao.ToDTO())
+	}
+
+	utils.SendResponse(c, http.StatusOK, "Issue Data", dtos)
 }
