@@ -13,3 +13,21 @@ type Issue struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
+
+type IssueDTO struct {
+	ID          uuid.UUID `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedAt   time.Time `json:"updatedAt"`
+}
+
+func (d *Issue) ToDTO() IssueDTO {
+	return IssueDTO{
+		ID:          d.ID,
+		Title:       d.Title,
+		Description: d.Description,
+		CreatedAt:   d.CreatedAt,
+		UpdatedAt:   d.UpdatedAt,
+	}
+}

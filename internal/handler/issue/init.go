@@ -1,7 +1,11 @@
 package issue
 
-type Handler struct{}
+type Handler struct {
+	repo IssueRepository
+}
 
-func New() *Handler {
-	return &Handler{}
+func New(issueRepo IssueRepository) *Handler {
+	return &Handler{
+		repo: issueRepo,
+	}
 }

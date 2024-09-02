@@ -1,0 +1,9 @@
+server:
+  host: db
+  port: 5000
+database:
+  user: root
+  password: password
+  name: sitemate
+  host: localhost
+  port: 5433
