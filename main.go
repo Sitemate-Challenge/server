@@ -10,6 +10,7 @@ import (
 
 	"sitemate-challenge-server/internal/config"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
@@ -63,7 +64,15 @@ func main() {
 
 	database.AutoMigrate(&entity.Issue{})
 
+	config := cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"}, // Update with your frontend URL
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		AllowCredentials: true,
+	}
+
 	router := gin.Default()
+	router.Use(cors.New(config))
 
 	pingH := pingHandler.New()
 
